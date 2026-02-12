@@ -3,7 +3,9 @@
 //! These are intentionally simple stroke fonts; fidelity can be improved later.
 
 mod atari;
-pub mod registry;
-pub mod styles;
+mod cinematronics;
+mod registry;
 
+pub use atari::AtariMini;
+pub use cinematronics::Cinematronics;
 pub use registry::FontRegistry;
