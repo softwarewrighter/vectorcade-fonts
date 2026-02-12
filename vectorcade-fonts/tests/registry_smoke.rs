@@ -1,4 +1,4 @@
-use vectorcade_fonts::{AtariMini, Cinematronics, FontRegistry, Midway};
+use vectorcade_fonts::{AtariMini, Cinematronics, FontRegistry, Midway, VectorScanline};
 use vectorcade_shared::font::{FontStyleId, VectorFont};
 
 #[test]
@@ -7,10 +7,11 @@ fn registry_finds_fonts() {
     reg.register(AtariMini);
     reg.register(Cinematronics);
     reg.register(Midway);
+    reg.register(VectorScanline);
     assert!(reg.get(FontStyleId::ATARI).is_some());
     assert!(reg.get(FontStyleId::CINEMATRONICS).is_some());
     assert!(reg.get(FontStyleId::MIDWAY).is_some());
-    assert!(reg.get(FontStyleId::VECTOR_SCANLINE).is_none());
+    assert!(reg.get(FontStyleId::VECTOR_SCANLINE).is_some());
 }
 
 #[test]
@@ -50,6 +51,22 @@ fn cinematronics_covers_all() {
 #[test]
 fn midway_covers_all() {
     let font = Midway;
+    for ch in '0'..='9' {
+        assert!(font.has_glyph(ch), "missing digit {ch}");
+        assert!(!font.glyph_paths(ch).is_empty(), "empty paths for {ch}");
+    }
+    for ch in 'A'..='Z' {
+        assert!(font.has_glyph(ch), "missing letter {ch}");
+        assert!(!font.glyph_paths(ch).is_empty(), "empty paths for {ch}");
+    }
+    for ch in [' ', '.', ',', ':', '-'] {
+        assert!(font.has_glyph(ch), "missing punct '{ch}'");
+    }
+}
+
+#[test]
+fn scanline_covers_all() {
+    let font = VectorScanline;
     for ch in '0'..='9' {
         assert!(font.has_glyph(ch), "missing digit {ch}");
         assert!(!font.glyph_paths(ch).is_empty(), "empty paths for {ch}");
