@@ -19,7 +19,7 @@ This repo is part of a multi-repo DAG:
 Clone all repos into the same parent directory:
 
 ```
-arcade/
+sw-fun/
   vectorcade-shared/
   vectorcade-fonts/
   vectorcade-games/
@@ -27,8 +27,8 @@ arcade/
   vectorcade-web-yew/
 ```
 
-Each repo includes a `.cargo/config.toml` with `[patch.crates-io]` entries
-that will automatically route `vectorcade-*` deps to local checkouts when present.
+Library repos (shared, fonts, render-wgpu) use **direct path dependencies** in
+their Cargo.toml files. Only the integration repo (vectorcade-games) should use
+`.cargo/config.toml` patches since it's the downstream consumer of all libraries.
 
-If you prefer git deps, remove/ignore that config and set the `git = "..."`
-URLs in `Cargo.toml`.
+This avoids "patch was not used" warnings and keeps dependency flow clear.
